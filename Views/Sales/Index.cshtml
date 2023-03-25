@@ -1,0 +1,335 @@
+﻿
+@{
+    ViewBag.Title = "銷貨訂單管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>銷貨訂單管理</h2>
+
+<div class="container">
+    <br />
+    <div class="d-flex justify-content-end">
+        @if (SE_No1.Utilities.CommonCodes.checkAuth("Sales", "Create"))
+        {
+            <button type="button" class="btn btn-success" id="createBtn">新增銷貨訂單</button>
+        }
+        &nbsp;
+        @if (SE_No1.Utilities.CommonCodes.checkAuth("Retailer", "Index"))
+        {
+            <a class="btn btn-warning" id="retailerBtn" href="@Url.Action("Index", "Retailer")">通路商管理</a>
+        }
+    </div>
+    <br />
+    <br />
+    <br />
+    <div style="margin:0 auto;">
+        <table id="demoGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>銷貨編號</th>
+                    <th>銷貨數量</th>
+                    <th>價格</th>
+                    <th>產品</th>
+                    <th>通路商</th>
+                    <th>銷貨時間</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<!--Data Detail Modal 新增或修改用的視窗，表單在這裡設計 -->
+<div class="modal modal-xl fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="needs-validation" id="dataForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">資料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col col-md-6">
+                            <input type="hidden" class="form-control" id="SalesIDControlInput" name="SalesID" disabled>
+                            <label for="SalesPriceControlInput" class="form-label">銷貨價格</label>
+                            <input type="number" class="form-control" id="SalesPriceControlInput" pattern="[0-9]*" min="1" max="1000000" name="SalesPrice" required>
+                            <div class="invalid-feedback">
+                                @SE_No1.Utilities.Message.dataIsZero
+                            </div>
+                        </div>
+                        <div class="col col-md-6">
+                            <label for="SalesCountControlInput" class="form-label">銷貨數量</label>
+                            <input type="number" class="form-control" id="SalesCountControlInput" pattern="[0-9]*" min="1" max="1000000" name="SalesCount" required>
+                            <div id="SalesCountInputCheck" class="invalid-feedback">
+                                @SE_No1.Utilities.Message.dataIsZero
+                            </div>
+                        </div>
+                        <div class="col col-md-6">
+                            <label for="SalesTimeControlInput" class="form-label">建立時間</label>
+                            <input type="datetime-local" class="form-control" id="SalesTimeControlInput" name="SalesTime" required>
+                            <div class="invalid-feedback">
+                                @SE_No1.Utilities.Message.required
+                            </div>
+                        </div>
+                        <div class="col col-md-6">
+                            @Html.Label("產品名稱")
+                            @Html.DropDownList("ProductID", new SelectList(ViewBag.ProductList, "ProductID", "ProductName"), new { @class = "form-control" })
+                        </div>
+                        <div class="col col-md-6">
+                            @Html.Label("通路商名稱")
+                            @Html.DropDownList("CorporateID", new SelectList(ViewBag.PartnerList, "CorporateID", "CorporateName"), new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success" id="editSendBtn">確認修改</button>
+                    <button type="button" class="btn btn-outline-success" id="createSendBtn">確認新增</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Warning Modal 刪除時跳出的警告視窗-->
+<div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="warningModalLabel">警告</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" id="deleteID" />
+            <div class="modal-body" id="warningModalBody">
+                確定刪除資料？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" id="deleteSendBtn">確認刪除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--inform Modal 新增或修改後跳出的通知視窗 -->
+<div class="modal fade" id="informModal" tabindex="-1" aria-labelledby="informModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="informModalLabel">通知</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" id="deleteID" />
+            <div class="modal-body" id="informModalBody">
+                通知訊息
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="submit">確認</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section  scripts{
+    <script>
+        $(document).ready(function () {
+            //這裡是資料列表，在這裡調整欄位
+            var dataTable = $("#demoGrid").DataTable({
+                                "processing": true, // for show progress bar
+                                "serverSide": true, // for process server side
+                                "filter": true, // this is for disable filter (search box)
+                                "orderMulti": false, // for disable multiple column at once
+                                "pageLength": 10, //一頁顯示幾筆
+
+                                "ajax": {
+                                    "url": "/Sales/LoadAllData",
+                                    "type": "POST",
+                                    "datatype": "json"
+                                },
+
+                                "columns": [
+                                    { "data": "SalesID", "name": "SalesID", "autoWidth": true },
+                                    { "data": "SalesPrice", "name": "SalesPrice", "autoWidth": true },
+                                    { "data": "SalesCount", "name": "SalesCount", "autoWidth": true },
+                                    { "data": "ProductName", "name": "ProductName", "autoWidth": true },
+                                    { "data": "CorporateName", "name": "CorporateName", "autoWidth": true },
+                                    {
+                                        "data": "SalesTime", "name": "SalesTime", "autoWidth": true,
+                                        "render": function (value) {
+                                            if (value === null) return "";
+                                            return moment(value).format('YYYY/MM/DD hh:mm:ss');
+                                        }
+                                    },
+                                    {
+                                        "render": function (data, type, row, meta) {
+                                            @if (SE_No1.Utilities.CommonCodes.checkAuth("Sales", "Update") && SE_No1.Utilities.CommonCodes.checkAuth("Sales", "Delete"))
+                                            {
+                                                <text>
+                                            return '<a class="btn btn-outline-primary" onclick="editBtnClick(\'' + row.SalesID + '\')" href="#">修改</a> | '
+                                                + '<a class="btn btn-outline-danger" onclick="deleteBtnClick(\'' + row.SalesID + '\')" href="#">刪除</a>';
+                                                </text>
+                                            }
+                                            else if (!SE_No1.Utilities.CommonCodes.checkAuth("Sales", "Update") && SE_No1.Utilities.CommonCodes.checkAuth("Sales", "Delete"))
+                                            {
+                                                <text>
+                                            return '<a class="btn btn-outline-danger" onclick="deleteBtnClick(\'' + row.SalesID + '\')" href="#">刪除</a>';
+                                                </text>
+                                            }
+                                            else if (SE_No1.Utilities.CommonCodes.checkAuth("Sales", "Update") && !SE_No1.Utilities.CommonCodes.checkAuth("Sales", "Delete"))
+                                            {
+                                                <text>
+                                            return '<a class="btn btn-outline-primary" onclick="editBtnClick(\'' + row.SalesID + '\')" href="#">修改</a>';
+                                                </text>
+                                            }
+                                            else
+                                            {
+                                                <text>
+                                            return '@SE_No1.Utilities.Message.permissionDenied';
+                                                </text>
+                                            }
+                                        }
+                                    },
+                                ]
+                            });
+
+            //下拉式選單
+            $('#selector').change(function () {
+                alert($('#selector').val());
+            });
+
+            //初始化通路商選單
+            $.ajax({
+                method: "POST",
+                url: '@Url.Action("GetDataList", "Retailer")',
+                dataType: 'json',
+            }).done(function (data) {
+                data.forEach((entry) => {
+                    $('#RoleIDControlInput').append(new Option(entry.RoleName, entry.RoleID))
+                })
+            });
+
+            //點擊新增資料按鈕，跳出表單給使用者輸入
+            $('#createBtn').on('click', function () {
+                //這裡要把所有表單資料清空
+                $('#dataForm').trigger("reset");
+                $('#dataForm').removeClass('was-validated'); //隱藏驗證文字
+
+                $('#detailModalLabel').html('新增資料'); //視窗標題
+                $('#editSendBtn').hide(); //隱藏確認修改按鈕
+                $('#createSendBtn').show(); //顯示確認新增按鈕
+                $('#detailModal').modal('show'); //顯示表單視窗
+            });
+
+            //點擊確認新增按鈕，送出表單
+            $('#createSendBtn').on('click', function () {
+                if (!$('#dataForm')[0].checkValidity()) {
+                    $('#dataForm').addClass('was-validated'); //顯示驗證文字
+                }
+                else {
+                    var datas = getFormData($('#dataForm'));
+                     $.ajax({
+                    method: "POST",
+                    url: '@Url.Action("Create", "Sales")',
+                    dataType: 'json',
+                    data: datas,
+                }).done(function (data) {
+                    if (data.success) {
+                        $('#informModalBody').html(data.successMsg); //通知訊息
+                        $('#detailModal').modal('toggle'); //關閉資料表單視窗
+                        dataTable.ajax.reload(); //刷新列表
+                    }
+                    else {
+                        $('#informModalBody').html(data.errorMsg); //通知訊息
+                    }
+                    $('#informModal').modal('show'); //顯示通知
+                    dataTable.ajax.reload(); //刷新列表
+                });
+                }
+            });
+
+            //點擊確認刪除按鈕，刪除資料
+            $('#deleteSendBtn').on('click', function () {
+                $('#warningModal').modal('toggle'); //關閉刪除警告視窗
+                $.ajax({
+                    method: "POST",
+                    url: '@Url.Action("Delete", "Sales")',
+                    dataType: 'json',
+                    data: {
+                        SalesID: $('#deleteID').val()
+                    },
+                }).done(function (data) {
+                    if (data.success) {
+                        $('#informModalBody').html(data.successMsg); //通知訊息
+                    }
+                    else {
+                        $('#informModalBody').html(data.errorMsg); //通知訊息
+                    }
+                    $('#informModal').modal('show'); //顯示通知
+                    dataTable.ajax.reload(); //刷新列表
+                });
+            });
+
+            //點擊確認修改按鈕，送出表單
+            $('#editSendBtn').on('click', function () {
+                if (!$('#dataForm')[0].checkValidity()) {
+                    $('#dataForm').addClass('was-validated'); //顯示驗證文字
+                }
+                else {
+                    var datas = getFormData($('#dataForm'));
+                $.ajax({
+                    method: "POST",
+                    url: '@Url.Action("Edit", "Sales")',
+                    dataType: 'json',
+                    data: datas,
+                }).done(function (data) {
+                    if (data.success) {
+                        $('#informModalBody').html(data.successMsg); //通知訊息
+                        $('#detailModal').modal('toggle'); //關閉資料表單視窗
+                    }
+                    else {
+                        $('#informModalBody').html(data.errorMsg); //通知訊息
+                    }
+                    $('#informModal').modal('show'); //顯示通知
+                    dataTable.ajax.reload(); //刷新列表
+                });
+                }
+            });
+        });
+
+        //點擊刪除按鈕，跳出確認視窗
+        function deleteBtnClick(ID) {
+            $('#warningModal').modal('show'); //顯示警告
+            $('#deleteID').val(ID); //設定要刪除的資料ID
+        }
+
+        //點擊修改按鈕，跳出表單給使用者輸入
+        function editBtnClick(ID) {
+            //這裡要把所有表單資料清空
+            $('#dataForm').trigger("reset");
+            $('#dataForm').removeClass('was-validated'); //隱藏驗證文字
+
+            //抓取原資料內容顯示，供修改
+            $.ajax({
+                method: "POST",
+                url: '@Url.Action("GetDataByID", "Sales")',
+                dataType: 'json',
+                data: {
+                    SalesID: ID
+                },
+            }).done(function (data) {
+                //這裡要把所有表單資料顯示，會依據不同模組顯示不同資料
+                $('#SalesIDControlInput').val(data.SalesID);
+                $('#SalesPriceControlInput').val(data.SalesPrice);
+                $('#SalesCountControlInput').val(data.SalesCount);
+                $('#SalesTimeControlInput').val(data.SalesTime);
+                $('#ProductID').val(data.ProductID);
+                $('#CorporateID').val(data.CorporateID);
+            });
+
+            $('#detailModalLabel').html('修改資料'); //視窗標題
+            $('#editSendBtn').show(); //顯示確認修改按鈕
+            $('#createSendBtn').hide(); //隱藏確認新增按鈕
+            $('#detailModal').modal('show'); //顯示表單視窗
+        }
+    </script>
+}

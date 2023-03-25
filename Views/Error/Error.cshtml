@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width" />
+    <title>錯誤</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="modal fade" id="informModal" tabindex="-1" aria-labelledby="informModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="informModalLabel">錯誤</h5>
+                    <a class="btn-close" aria-label="Close" href="@ViewData["RedirectUrl"]"></a>
+                </div>
+                <input type="hidden" id="deleteID" />
+                <div class="modal-body" id="informModalBody">
+                    @ViewData["Message"]
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" href="@ViewData["RedirectUrl"]">確認</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-3.6.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#informModal').modal('show');
+        });
+    </script>
+</body>
+</html>

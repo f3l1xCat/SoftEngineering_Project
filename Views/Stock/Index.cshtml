@@ -1,0 +1,369 @@
+﻿
+@{
+    ViewBag.Title = "存貨管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>存貨管理</h2>
+
+<div class="container">
+    <br />
+    <div class="d-flex justify-content-end">
+        @if (SE_No1.Utilities.CommonCodes.checkAuth("Stock", "Create"))
+        {
+            <button type="button" class="btn btn-success" id="createBtn">新增存貨</button>
+        }
+    </div>
+    <br />
+    <br />
+    <br />
+    <div style="margin:0 auto;">
+        <table id="demoGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>存貨編號</th>
+                    <th>存貨數量</th>
+                    <th>貨架編號</th>
+                    <th>產品名稱</th>
+                    <th>倉庫編號</th>
+                    <th>存貨時間</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<!--Data Detail Modal 新增或修改用的視窗，表單在這裡設計 -->
+<div class="modal modal-xl fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="dataForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">資料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col col-md-6">
+                            <label for="StockIDControlInput" class="form-label">存貨編號</label>
+                            <input type="text" class="form-control" id="StockIDControlInput" name="StockID" disabled>
+                        </div>
+                        <div class="col col-md-6">
+                            <label for="StockCountControlInput" class="form-label">存貨數量</label>
+                            <input type="number" class="form-control" id="StockCountControlInput" name="StockCount" min="1" max="1000" required>
+                            <div class="invalid-feedback">
+                                請輸入1~1000的數字
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-6">
+                            <label for="ShelveIDControlInput" class="form-label">貨架編號</label>
+                            <select class="form-select" aria-label="Default select example" id="ShelveIDControlInput" name="ShelveID" required>
+                                <option value="">選擇貨架</option>
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
+                                <option value=4>4</option>
+                                <option value=5>5</option>
+                                <option value=6>6</option>
+                                <option value=7>7</option>
+                                <option value=8>8</option>
+                                <option value=9>9</option>
+                                <option value=10>10</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                不可為空
+                            </div>
+                        </div>
+                        <div class="col col-md-6">
+                            <label for="ProductIDControlInput" class="form-label">選擇產品</label>
+                            <select class="form-select" aria-label="Default select example" id="ProductIDControlInput" name="ProductID" required>
+                                <option value="">選擇產品</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                不可為空
+                            </div>
+                        </div>
+                        <div class="col col-md-6">
+                            <label for="StoreHouseIDControlInput" class="form-label">選擇倉庫編號</label>
+                            <select class="form-select" aria-label="Default select example" id="StoreHouseIDControlInput" name="StoreHouseID" required>
+                                <option value="">選擇倉庫編號</option>
+                                <option value=1>一號倉庫</option>
+                                <option value=2>二號倉庫</option>
+                                <option value=3>三號倉庫</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                不可為空
+                            </div>
+                        </div>
+                        <div class="col col-md-6">
+                            <label for="StoreTimeControlInput" class="form-label">存貨時間</label>
+                            <input type="datetime-local" class="form-control" id="StoreTimeControlInput" name="StoreTime"  required>
+                            <div class="invalid-feedback">
+                                請選擇正確範圍內的時間
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success" id="editSendBtn">確認修改</button>
+                    <button type="button" class="btn btn-outline-success" id="createSendBtn">確認新增</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Warning Modal 刪除時跳出的警告視窗-->
+<div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="warningModalLabel">警告</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" id="deleteID" />
+            <div class="modal-body" id="warningModalBody">
+                確定刪除資料？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" id="deleteSendBtn">確認刪除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--inform Modal 新增或修改後跳出的通知視窗 -->
+<div class="modal fade" id="informModal" tabindex="-1" aria-labelledby="informModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="informModalLabel">通知</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" id="deleteID" />
+            <div class="modal-body" id="informModalBody">
+                通知訊息
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="submit">確認</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section  scripts{
+    <script>
+        $(document).ready(function () {
+            // Get current date and time
+            var currentDate = new Date();
+
+            // Format date and time
+            var currentDateString = currentDate.getFullYear() + "-" +
+                ("0" + (currentDate.getMonth() + 1)).slice(-2) + "-" +
+                ("0" + currentDate.getDate()).slice(-2) + "T" +
+                ("0" + currentDate.getHours()).slice(-2) + ":" +
+                ("0" + currentDate.getMinutes()).slice(-2);
+
+            // Set max attribute of datetime-local input
+            $("#StoreTimeControlInput").attr("max", currentDateString);
+            //這裡是資料列表，在這裡調整欄位
+            var dataTable = $("#demoGrid").DataTable({
+                                "processing": true, // for show progress bar
+                                "serverSide": true, // for process server side
+                                "filter": true, // this is for disable filter (search box)
+                                "orderMulti": false, // for disable multiple column at once
+                                "pageLength": 10, //一頁顯示幾筆
+
+                                "ajax": {
+                                    "url": "/Stock/LoadAllData",
+                                    "type": "POST",
+                                    "datatype": "json"
+                                },
+
+                                "columns": [
+                                    { "data": "StockID", "name": "StockID", "autoWidth": true },
+                                    { "data": "StockCount", "name": "StockCount", "autoWidth": true },
+                                    { "data": "ShelveID", "name": "ShelveID", "autoWidth": true },
+                                    { "data": "ProductName", "name": "ProductID", "autoWidth": true },
+                                    { "data": "StoreHouseID", "name": "StoreHouseID", "autoWidth": true },
+                                    {
+                                        "data": "StoreTime", "name": "StoreTime", "autoWidth": true,
+                                        "render": function (value) {
+                                            if (value === null) return "";
+                                            return moment(value).format('YYYY/MM/DD hh:mm:ss');
+                                        }
+                                    },
+                                    {
+                                        "render": function (data, type, row, meta) {
+                                            @if (SE_No1.Utilities.CommonCodes.checkAuth("Stock", "Update") && SE_No1.Utilities.CommonCodes.checkAuth("Stock", "Delete"))
+                                            {
+                                                <text>
+                                            return '<a class="btn btn-outline-primary" onclick="editBtnClick(\'' + row.StockID + '\')" href="#">修改</a> | '
+                                                + '<a class="btn btn-outline-danger" onclick="deleteBtnClick(\'' + row.StockID + '\')" href="#">刪除</a>';
+                                                </text>
+                                            }
+                                            else if (!SE_No1.Utilities.CommonCodes.checkAuth("Stock", "Update") && SE_No1.Utilities.CommonCodes.checkAuth("Stock", "Delete"))
+                                            {
+                                                <text>
+                                            return '<a class="btn btn-outline-danger" onclick="deleteBtnClick(\'' + row.StockID + '\')" href="#">刪除</a>';
+                                                </text>
+                                            }
+                                            else if (SE_No1.Utilities.CommonCodes.checkAuth("Stock", "Update") && !SE_No1.Utilities.CommonCodes.checkAuth("Stock", "Delete"))
+                                            {
+                                                <text>
+                                            return '<a class="btn btn-outline-primary" onclick="editBtnClick(\'' + row.StockID + '\')" href="#">修改</a>';
+                                                </text>
+                                            }
+                                            else
+                                            {
+                                                <text>
+                                             		return '@SE_No1.Utilities.Message.permissionDenied';
+                                                </text>
+                                            }
+                                        }
+                                    },
+                                ]
+                            });
+
+            //下拉式選單
+            $('#selector').change(function () {
+                alert($('#selector').val());
+            });
+
+             //初始化產品ID選單
+            $.ajax({
+                method: "POST",
+                url: '@Url.Action("GetDataList", "Product")',
+                dataType: 'json',
+            }).done(function (data) {
+                data.forEach((entry) => {
+                    $('#ProductIDControlInput').append(new Option(entry.ProductName,entry.ProductID))
+                })
+            });
+
+            //點擊新增資料按鈕，跳出表單給使用者輸入
+            $('#createBtn').on('click', function () {
+                //這裡要把所有表單資料清空
+                $('#dataForm').trigger("reset");
+                $('#dataForm').removeClass('was-validated'); //隱藏驗證文字
+
+
+                $('#detailModalLabel').html('新增資料'); //視窗標題
+                $('#editSendBtn').hide(); //隱藏確認修改按鈕
+                $('#createSendBtn').show(); //顯示確認新增按鈕
+                $('#detailModal').modal('show'); //顯示表單視窗
+            });
+
+            //點擊確認新增按鈕，送出表單
+            $('#createSendBtn').on('click', function () {
+                if (!$('#dataForm')[0].checkValidity()) {
+                    $('#dataForm').addClass('was-validated'); //顯示驗證文字
+                }
+                else {
+                    
+                    var datas = getFormData($('#dataForm'));
+                    datas['StockID'] = -1; //避免roleID null出錯給他一個值
+                $.ajax({
+                    method: "POST",
+                    url: '@Url.Action("Create", "Stock")',
+                    dataType: 'json',
+                    data: datas,
+                }).done(function (data) {
+                    if (data.success) {
+                        $('#informModalBody').html(data.successMsg); //通知訊息
+                        $('#detailModal').modal('toggle'); //關閉資料表單視窗
+                    }
+                    else {
+                        $('#informModalBody').html(data.errorMsg); //通知訊息
+                    }
+                    $('#informModal').modal('show'); //顯示通知
+                    dataTable.ajax.reload(); //刷新列表
+                });
+                }
+
+            });
+
+            
+
+            //點擊確認刪除按鈕，刪除資料
+            $('#deleteSendBtn').on('click', function () {
+                $('#warningModal').modal('toggle'); //關閉刪除警告視窗
+                $.ajax({
+                    method: "POST",
+                    url: '@Url.Action("Delete", "Stock")',
+                    dataType: 'json',
+                    data: {
+                        StockID: $('#deleteID').val()
+                    },
+                }).done(function (data) {
+                    if (data.success) {
+                        $('#informModalBody').html(data.successMsg); //通知訊息
+                    }
+                    else {
+                        $('#informModalBody').html(data.errorMsg); //通知訊息
+                    }
+                    $('#informModal').modal('show'); //顯示通知
+                    dataTable.ajax.reload(); //刷新列表
+                });
+            });
+
+            //點擊確認修改按鈕，送出表單
+            $('#editSendBtn').on('click', function () {
+                
+                var datas = getFormData($('#dataForm'));
+                $.ajax({
+                    method: "POST",
+                    url: '@Url.Action("Edit", "Stock")',
+                    dataType: 'json',
+                    data: datas,
+                }).done(function (data) {
+                    if (data.success) {
+                        $('#informModalBody').html(data.successMsg); //通知訊息
+                        $('#detailModal').modal('toggle'); //關閉資料表單視窗
+                    }
+                    else {
+                        $('#informModalBody').html(data.errorMsg); //通知訊息
+                    }
+                    $('#informModal').modal('show'); //顯示通知
+                    dataTable.ajax.reload(); //刷新列表
+                });
+            });
+        });
+
+        //點擊刪除按鈕，跳出確認視窗
+        function deleteBtnClick(ID) {
+            $('#warningModal').modal('show'); //顯示警告
+            $('#deleteID').val(ID); //設定要刪除的資料ID
+        }
+
+        //點擊修改按鈕，跳出表單給使用者輸入
+        function editBtnClick(ID) {
+            //抓取原資料內容顯示，供修改
+            $.ajax({
+                method: "POST",
+                url: '@Url.Action("GetDataByID", "Stock")',
+                dataType: 'json',
+                data: {
+                    StockID: ID
+                },
+            }).done(function (data) {
+                //這裡要把所有表單資料顯示，會依據不同模組顯示不同資料
+                $('#StockIDControlInput').val(data.StockID);
+                $('#StockCountControlInput').val(data.StockCount);
+                $('#ShelveIDControlInput').val(data.ShelveID);
+                $('#ProductIDControlInput').val(data.ProductID);
+                $('#StoreHouseIDControlInput').val(data.StoreHouseID);
+                $('#StoreTimeControlInput').val(data.StoreTime);
+            });
+
+            $('#detailModalLabel').html('修改資料'); //視窗標題
+            $('#editSendBtn').show(); //顯示確認修改按鈕
+            $('#createSendBtn').hide(); //隱藏確認新增按鈕
+            $('#detailModal').modal('show'); //顯示表單視窗
+        }
+    </script>
+}

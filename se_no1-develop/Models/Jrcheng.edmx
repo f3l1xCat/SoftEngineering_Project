@@ -1,0 +1,540 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="JRCHENGModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'JRCHENG.dbo.Employees' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="EmployeeName" />
+            <PropertyRef Name="EmployeeSex" />
+            <PropertyRef Name="EmployeeDoB" />
+            <PropertyRef Name="JobTitle" />
+            <PropertyRef Name="IdentityCard" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="PhoneNumber" />
+            <PropertyRef Name="HomePhoneNumber" />
+            <PropertyRef Name="Department" />
+            <PropertyRef Name="EmergencyContact" />
+            <PropertyRef Name="EmergencyPhoneNumber" />
+            <PropertyRef Name="EmergencyContactRelationship" />
+            <PropertyRef Name="EmploymentStatus" />
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EmployeeSex" Type="nvarchar" MaxLength="2" Nullable="false" />
+          <Property Name="MaritalStatus" Type="nvarchar" MaxLength="10" />
+          <Property Name="EmployeeDoB" Type="date" Nullable="false" />
+          <Property Name="JobTitle" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IdentityCard" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="HomePhoneNumber" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Department" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmergencyContact" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EmergencyPhoneNumber" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="EmergencyContactRelationship" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="EmploymentStatus" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Partners">
+          <Key>
+            <PropertyRef Name="CorporateID" />
+          </Key>
+          <Property Name="CorporateID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CorporateName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CorporatePrinciple" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CorporateDescription" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CorporateAddress" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CorporateTaxIDNo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CorporateType" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ProductSize" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Pricing" Type="int" Nullable="false" />
+          <Property Name="ProductCategory" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ProductClassifier" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="PartnerlD" Type="int" Nullable="false" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'JRCHENG.dbo.Purchases' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="Purchases">
+          <Key>
+            <PropertyRef Name="PurchasesID" />
+            <PropertyRef Name="PurchasesCount" />
+            <PropertyRef Name="PurchasesTime" />
+            <PropertyRef Name="FinalPrice" />
+            <PropertyRef Name="ProductID" />
+            <PropertyRef Name="CorporateID" />
+          </Key>
+          <Property Name="PurchasesID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchasesCount" Type="int" Nullable="false" />
+          <Property Name="PurchasesTime" Type="datetime" Nullable="false" />
+          <Property Name="FinalPrice" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="CorporateID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="EmployeeCreate" Type="bit" />
+          <Property Name="EmployeeRetrieve" Type="bit" />
+          <Property Name="EmployeeUpdate" Type="bit" />
+          <Property Name="EmployeeDelete" Type="bit" />
+          <Property Name="SalesCreate" Type="bit" />
+          <Property Name="SalesRetrieve" Type="bit" />
+          <Property Name="SalesUpdate" Type="bit" />
+          <Property Name="SalesDelete" Type="bit" />
+          <Property Name="StockCreate" Type="bit" />
+          <Property Name="StockRetrieve" Type="bit" />
+          <Property Name="StockUpdate" Type="bit" />
+          <Property Name="StockDelete" Type="bit" />
+          <Property Name="ProcurementCreate" Type="bit" />
+          <Property Name="ProcurementRetrieve" Type="bit" />
+          <Property Name="ProcurementUpdate" Type="bit" />
+          <Property Name="ProcurementDelete" Type="bit" />
+          <Property Name="ProductCreate" Type="bit" />
+          <Property Name="ProductRetrieve" Type="bit" />
+          <Property Name="ProductUpdate" Type="bit" />
+          <Property Name="ProductDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="Sales">
+          <Key>
+            <PropertyRef Name="SalesID" />
+          </Key>
+          <Property Name="SalesID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SalesPrice" Type="int" Nullable="false" />
+          <Property Name="SalesCount" Type="int" Nullable="false" />
+          <Property Name="SalesTime" Type="datetime" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="CorporateID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stocks">
+          <Key>
+            <PropertyRef Name="StockID" />
+          </Key>
+          <Property Name="StockID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StockCount" Type="int" Nullable="false" />
+          <Property Name="ShelveID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="StoreHouseID" Type="int" Nullable="false" />
+          <Property Name="StoreTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'JRCHENG.dbo.View_Sales_Product_Partners' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="View_Sales_Product_Partners">
+          <Key>
+            <PropertyRef Name="SalesID" />
+            <PropertyRef Name="SalesPrice" />
+            <PropertyRef Name="SalesCount" />
+            <PropertyRef Name="SalesTime" />
+          </Key>
+          <Property Name="SalesID" Type="int" Nullable="false" />
+          <Property Name="SalesPrice" Type="int" Nullable="false" />
+          <Property Name="SalesCount" Type="int" Nullable="false" />
+          <Property Name="SalesTime" Type="datetime" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="20" />
+          <Property Name="CorporateName" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <Function Name="fnGetSalesData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="SalesID" Type="int" Nullable="false" />
+                <Property Name="SalesPrice" Type="int" Nullable="false" />
+                <Property Name="SalesCount" Type="int" Nullable="false" />
+                <Property Name="SalesTime" Type="datetime" Nullable="false" />
+                <Property Name="ProductName" Type="int" Nullable="false" />
+                <Property Name="CorporateName" Type="int" Nullable="false" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <EntityContainer Name="JRCHENGModelStoreContainer">
+          <EntitySet Name="Partners" EntityType="Self.Partners" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stocks" EntityType="Self.Stocks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Employees].[EmployeeID] AS [EmployeeID], 
+    [Employees].[EmployeeName] AS [EmployeeName], 
+    [Employees].[EmployeeSex] AS [EmployeeSex], 
+    [Employees].[MaritalStatus] AS [MaritalStatus], 
+    [Employees].[EmployeeDoB] AS [EmployeeDoB], 
+    [Employees].[JobTitle] AS [JobTitle], 
+    [Employees].[IdentityCard] AS [IdentityCard], 
+    [Employees].[Address] AS [Address], 
+    [Employees].[PhoneNumber] AS [PhoneNumber], 
+    [Employees].[HomePhoneNumber] AS [HomePhoneNumber], 
+    [Employees].[Department] AS [Department], 
+    [Employees].[EmergencyContact] AS [EmergencyContact], 
+    [Employees].[EmergencyPhoneNumber] AS [EmergencyPhoneNumber], 
+    [Employees].[EmergencyContactRelationship] AS [EmergencyContactRelationship], 
+    [Employees].[EmploymentStatus] AS [EmploymentStatus], 
+    [Employees].[RoleID] AS [RoleID]
+    FROM [dbo].[Employees] AS [Employees]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Purchases" EntityType="Self.Purchases" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Purchases].[PurchasesID] AS [PurchasesID], 
+    [Purchases].[PurchasesCount] AS [PurchasesCount], 
+    [Purchases].[PurchasesTime] AS [PurchasesTime], 
+    [Purchases].[FinalPrice] AS [FinalPrice], 
+    [Purchases].[ProductID] AS [ProductID], 
+    [Purchases].[CorporateID] AS [CorporateID]
+    FROM [dbo].[Purchases] AS [Purchases]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_Sales_Product_Partners" EntityType="Self.View_Sales_Product_Partners" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_Sales_Product_Partners].[SalesID] AS [SalesID], 
+    [View_Sales_Product_Partners].[SalesPrice] AS [SalesPrice], 
+    [View_Sales_Product_Partners].[SalesCount] AS [SalesCount], 
+    [View_Sales_Product_Partners].[SalesTime] AS [SalesTime], 
+    [View_Sales_Product_Partners].[ProductName] AS [ProductName], 
+    [View_Sales_Product_Partners].[CorporateName] AS [CorporateName]
+    FROM [dbo].[View_Sales_Product_Partners] AS [View_Sales_Product_Partners]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="JRCHENGModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="fnGetSalesData_Result">
+          <Property Name="SalesID" Type="Int32" Nullable="false" />
+          <Property Name="SalesPrice" Type="Int32" Nullable="false" />
+          <Property Name="SalesCount" Type="Int32" Nullable="false" />
+          <Property Name="SalesTime" Type="DateTime" Nullable="false" />
+          <Property Name="ProductName" Type="Int32" Nullable="false" />
+          <Property Name="CorporateName" Type="Int32" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="Partner">
+          <Key>
+            <PropertyRef Name="CorporateID" />
+          </Key>
+          <Property Name="CorporateID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CorporateName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CorporatePrinciple" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CorporateDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CorporateAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CorporateTaxIDNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CorporateType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductSize" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Pricing" Type="Int32" Nullable="false" />
+          <Property Name="ProductCategory" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductClassifier" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PartnerlD" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmployeeCreate" Type="Boolean" />
+          <Property Name="EmployeeRetrieve" Type="Boolean" />
+          <Property Name="EmployeeUpdate" Type="Boolean" />
+          <Property Name="EmployeeDelete" Type="Boolean" />
+          <Property Name="SalesCreate" Type="Boolean" />
+          <Property Name="SalesRetrieve" Type="Boolean" />
+          <Property Name="SalesUpdate" Type="Boolean" />
+          <Property Name="SalesDelete" Type="Boolean" />
+          <Property Name="StockCreate" Type="Boolean" />
+          <Property Name="StockRetrieve" Type="Boolean" />
+          <Property Name="StockUpdate" Type="Boolean" />
+          <Property Name="StockDelete" Type="Boolean" />
+          <Property Name="ProcurementCreate" Type="Boolean" />
+          <Property Name="ProcurementRetrieve" Type="Boolean" />
+          <Property Name="ProcurementUpdate" Type="Boolean" />
+          <Property Name="ProcurementDelete" Type="Boolean" />
+          <Property Name="ProductCreate" Type="Boolean" />
+          <Property Name="ProductRetrieve" Type="Boolean" />
+          <Property Name="ProductUpdate" Type="Boolean" />
+          <Property Name="ProductDelete" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Sale">
+          <Key>
+            <PropertyRef Name="SalesID" />
+          </Key>
+          <Property Name="SalesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SalesPrice" Type="Int32" Nullable="false" />
+          <Property Name="SalesCount" Type="Int32" Nullable="false" />
+          <Property Name="SalesTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="CorporateID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="StockID" />
+          </Key>
+          <Property Name="StockID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StockCount" Type="Int32" Nullable="false" />
+          <Property Name="ShelveID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="StoreHouseID" Type="Int32" Nullable="false" />
+          <Property Name="StoreTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="EmployeeName" />
+            <PropertyRef Name="EmployeeSex" />
+            <PropertyRef Name="EmployeeDoB" />
+            <PropertyRef Name="JobTitle" />
+            <PropertyRef Name="IdentityCard" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="PhoneNumber" />
+            <PropertyRef Name="HomePhoneNumber" />
+            <PropertyRef Name="Department" />
+            <PropertyRef Name="EmergencyContact" />
+            <PropertyRef Name="EmergencyPhoneNumber" />
+            <PropertyRef Name="EmergencyContactRelationship" />
+            <PropertyRef Name="EmploymentStatus" />
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmployeeSex" Type="String" MaxLength="2" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaritalStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeDoB" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="JobTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IdentityCard" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="HomePhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmergencyContact" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmergencyPhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmergencyContactRelationship" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmploymentStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Purchase">
+          <Key>
+            <PropertyRef Name="PurchasesID" />
+            <PropertyRef Name="PurchasesCount" />
+            <PropertyRef Name="PurchasesTime" />
+            <PropertyRef Name="FinalPrice" />
+            <PropertyRef Name="ProductID" />
+            <PropertyRef Name="CorporateID" />
+          </Key>
+          <Property Name="PurchasesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchasesCount" Type="Int32" Nullable="false" />
+          <Property Name="PurchasesTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FinalPrice" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="CorporateID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="View_Sales_Product_Partners">
+          <Key>
+            <PropertyRef Name="SalesID" />
+            <PropertyRef Name="SalesPrice" />
+            <PropertyRef Name="SalesCount" />
+            <PropertyRef Name="SalesTime" />
+          </Key>
+          <Property Name="SalesID" Type="Int32" Nullable="false" />
+          <Property Name="SalesPrice" Type="Int32" Nullable="false" />
+          <Property Name="SalesCount" Type="Int32" Nullable="false" />
+          <Property Name="SalesTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ProductName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CorporateName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="JRCHENGEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Partners" EntityType="Self.Partner" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="Sales" EntityType="Self.Sale" />
+          <EntitySet Name="Stocks" EntityType="Self.Stock" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="Purchases" EntityType="Self.Purchase" />
+          <EntitySet Name="View_Sales_Product_Partners" EntityType="Self.View_Sales_Product_Partners" />
+          <FunctionImport Name="fnGetSalesData" IsComposable="true" ReturnType="Collection(JRCHENGModel.fnGetSalesData_Result)" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="JRCHENGModelStoreContainer" CdmEntityContainer="JRCHENGEntities">
+          <EntitySetMapping Name="Partners">
+            <EntityTypeMapping TypeName="JRCHENGModel.Partner">
+              <MappingFragment StoreEntitySet="Partners">
+                <ScalarProperty Name="CorporateID" ColumnName="CorporateID" />
+                <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
+                <ScalarProperty Name="CorporatePrinciple" ColumnName="CorporatePrinciple" />
+                <ScalarProperty Name="CorporateDescription" ColumnName="CorporateDescription" />
+                <ScalarProperty Name="CorporateAddress" ColumnName="CorporateAddress" />
+                <ScalarProperty Name="CorporateTaxIDNo" ColumnName="CorporateTaxIDNo" />
+                <ScalarProperty Name="CorporateType" ColumnName="CorporateType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="JRCHENGModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductSize" ColumnName="ProductSize" />
+                <ScalarProperty Name="Pricing" ColumnName="Pricing" />
+                <ScalarProperty Name="ProductCategory" ColumnName="ProductCategory" />
+                <ScalarProperty Name="ProductClassifier" ColumnName="ProductClassifier" />
+                <ScalarProperty Name="PartnerlD" ColumnName="PartnerlD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="JRCHENGModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="EmployeeCreate" ColumnName="EmployeeCreate" />
+                <ScalarProperty Name="EmployeeRetrieve" ColumnName="EmployeeRetrieve" />
+                <ScalarProperty Name="EmployeeUpdate" ColumnName="EmployeeUpdate" />
+                <ScalarProperty Name="EmployeeDelete" ColumnName="EmployeeDelete" />
+                <ScalarProperty Name="SalesCreate" ColumnName="SalesCreate" />
+                <ScalarProperty Name="SalesRetrieve" ColumnName="SalesRetrieve" />
+                <ScalarProperty Name="SalesUpdate" ColumnName="SalesUpdate" />
+                <ScalarProperty Name="SalesDelete" ColumnName="SalesDelete" />
+                <ScalarProperty Name="StockCreate" ColumnName="StockCreate" />
+                <ScalarProperty Name="StockRetrieve" ColumnName="StockRetrieve" />
+                <ScalarProperty Name="StockUpdate" ColumnName="StockUpdate" />
+                <ScalarProperty Name="StockDelete" ColumnName="StockDelete" />
+                <ScalarProperty Name="ProcurementCreate" ColumnName="ProcurementCreate" />
+                <ScalarProperty Name="ProcurementRetrieve" ColumnName="ProcurementRetrieve" />
+                <ScalarProperty Name="ProcurementUpdate" ColumnName="ProcurementUpdate" />
+                <ScalarProperty Name="ProcurementDelete" ColumnName="ProcurementDelete" />
+                <ScalarProperty Name="ProductCreate" ColumnName="ProductCreate" />
+                <ScalarProperty Name="ProductRetrieve" ColumnName="ProductRetrieve" />
+                <ScalarProperty Name="ProductUpdate" ColumnName="ProductUpdate" />
+                <ScalarProperty Name="ProductDelete" ColumnName="ProductDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sales">
+            <EntityTypeMapping TypeName="JRCHENGModel.Sale">
+              <MappingFragment StoreEntitySet="Sales">
+                <ScalarProperty Name="SalesID" ColumnName="SalesID" />
+                <ScalarProperty Name="SalesPrice" ColumnName="SalesPrice" />
+                <ScalarProperty Name="SalesCount" ColumnName="SalesCount" />
+                <ScalarProperty Name="SalesTime" ColumnName="SalesTime" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="CorporateID" ColumnName="CorporateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stocks">
+            <EntityTypeMapping TypeName="JRCHENGModel.Stock">
+              <MappingFragment StoreEntitySet="Stocks">
+                <ScalarProperty Name="StockID" ColumnName="StockID" />
+                <ScalarProperty Name="StockCount" ColumnName="StockCount" />
+                <ScalarProperty Name="ShelveID" ColumnName="ShelveID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="StoreHouseID" ColumnName="StoreHouseID" />
+                <ScalarProperty Name="StoreTime" ColumnName="StoreTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="JRCHENGModel.Employee">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeSex" ColumnName="EmployeeSex" />
+                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+                <ScalarProperty Name="EmployeeDoB" ColumnName="EmployeeDoB" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="IdentityCard" ColumnName="IdentityCard" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="HomePhoneNumber" ColumnName="HomePhoneNumber" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="EmergencyContact" ColumnName="EmergencyContact" />
+                <ScalarProperty Name="EmergencyPhoneNumber" ColumnName="EmergencyPhoneNumber" />
+                <ScalarProperty Name="EmergencyContactRelationship" ColumnName="EmergencyContactRelationship" />
+                <ScalarProperty Name="EmploymentStatus" ColumnName="EmploymentStatus" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Purchases">
+            <EntityTypeMapping TypeName="JRCHENGModel.Purchase">
+              <MappingFragment StoreEntitySet="Purchases">
+                <ScalarProperty Name="PurchasesID" ColumnName="PurchasesID" />
+                <ScalarProperty Name="PurchasesCount" ColumnName="PurchasesCount" />
+                <ScalarProperty Name="PurchasesTime" ColumnName="PurchasesTime" />
+                <ScalarProperty Name="FinalPrice" ColumnName="FinalPrice" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="CorporateID" ColumnName="CorporateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_Sales_Product_Partners">
+            <EntityTypeMapping TypeName="JRCHENGModel.View_Sales_Product_Partners">
+              <MappingFragment StoreEntitySet="View_Sales_Product_Partners">
+                <ScalarProperty Name="SalesID" ColumnName="SalesID" />
+                <ScalarProperty Name="SalesPrice" ColumnName="SalesPrice" />
+                <ScalarProperty Name="SalesCount" ColumnName="SalesCount" />
+                <ScalarProperty Name="SalesTime" ColumnName="SalesTime" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionName="JRCHENGModel.Store.fnGetSalesData" FunctionImportName="fnGetSalesData">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JRCHENGModel.fnGetSalesData_Result">
+                <ScalarProperty Name="SalesID" ColumnName="SalesID" />
+                <ScalarProperty Name="SalesPrice" ColumnName="SalesPrice" />
+                <ScalarProperty Name="SalesCount" ColumnName="SalesCount" />
+                <ScalarProperty Name="SalesTime" ColumnName="SalesTime" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="CorporateName" ColumnName="CorporateName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

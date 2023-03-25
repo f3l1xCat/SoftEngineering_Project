@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2cfd5ed5fff54cd2b37338c81d7a2817" Name="Diagram1" ZoomLevel="98">
+        <EntityTypeShape EntityType="JRCHENGModel.Employee" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="JRCHENGModel.Partner" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="JRCHENGModel.Sale" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="JRCHENGModel.Stock" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="JRCHENGModel.sysdiagram" Width="1.5" PointX="5.375" PointY="7.75" />
+        <EntityTypeShape EntityType="JRCHENGModel.View_Sales_Product_Partners" Width="1.5" PointX="7.375" PointY="6.75" />
+        <EntityTypeShape EntityType="JRCHENGModel.Purchase" Width="1.5" PointX="7.375" PointY="3.75" />
+        <EntityTypeShape EntityType="JRCHENGModel.Product" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="JRCHENGModel.stock_product_view" Width="1.5" PointX="9.375" PointY="4.75" />
+        <EntityTypeShape EntityType="JRCHENGModel.View_Products_Partners" Width="1.5" PointX="7.375" PointY="9.75" />
+        <EntityTypeShape EntityType="JRCHENGModel.Role" Width="1.5" PointX="0.75" PointY="6.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
